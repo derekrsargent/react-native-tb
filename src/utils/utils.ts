@@ -27,13 +27,13 @@ export const calculateTax = (subtotal: number) => {
 };
 
 export const calculateTotal = ({
-  discount,
+  discounts,
   subtotal,
   tax,
 }: {
-  discount: number;
+  discounts: number;
   subtotal: number;
   tax: number;
 }) => {
-  return subtotal + tax - discount;
+  return subtotal + tax - discounts;
 };

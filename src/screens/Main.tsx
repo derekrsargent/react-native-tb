@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {FlatList, TouchableOpacity, Text, StyleSheet, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {data} from '../data/data';
 import {
@@ -8,6 +8,7 @@ import {
   calculateDiscounts,
   calculateSubtotal,
   calculateTax,
+  calculateTotal,
 } from '../utils/utils';
 
 import type {RootStackParamList} from '../../App';
@@ -51,13 +52,26 @@ const SelectableItem = ({item, onPress}: {item: Item; onPress: () => void}) => {
   );
 };
 
-const MainScreen = () => {
+const MainScreen = ({route}: {route: any}) => {
   const navigation: NavigationProp<RootStackParamList> = useNavigation();
   const [ordered, setOrdered] = useState<Item[]>();
   const [subtotal, setSubtotal] = useState(0);
   const [discounts, setDiscounts] = useState(0);
   const [tax, setTax] = useState(0);
   const [total, setTotal] = useState(0);
+  const [selectedDiscounts, setSelectedDiscounts] = useState<number[]>([69]);
+
+  useFocusEffect(
+    useCallback(() => {
+      setSelectedDiscounts(route?.params?.discountIds);
+    }, [route?.params?.discountIds]),
+  );
+
+  // TODO: remove
+  useEffect(() => {
+    console.log('In Main');
+    console.log(selectedDiscounts);
+  }, [selectedDiscounts]);
 
   const handleOnPress = (item: Item) => {
     ordered
@@ -81,7 +95,9 @@ const MainScreen = () => {
       setSubtotal(_subtotal);
       setDiscounts(calculateDiscounts(_subtotal));
       setTax(calculateTax(_subtotal) + calculateAlcoholTax(ordered));
-      setTotal(_subtotal + _tax - _discounts);
+      setTotal(
+        calculateTotal({subtotal: _subtotal, tax: _tax, discounts: _discounts}),
+      );
     }
   }, [ordered]);
 
@@ -89,7 +105,9 @@ const MainScreen = () => {
     <View style={styles.container}>
       <View style={styles.container}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Discounts')}
+          onPress={() =>
+            navigation.navigate('Discounts', {discountIds: selectedDiscounts})
+          }
           style={styles.button}>
           <Text style={styles.buttonText}>Select Discount</Text>
         </TouchableOpacity>

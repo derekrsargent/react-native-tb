@@ -5,8 +5,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {DiscountsScreen, MainScreen} from './src/screens';
 
 export type RootStackParamList = {
-  Discounts: undefined;
-  Main: undefined;
+  Discounts: {discountIds: number[]};
+  Main: {discountIds: number[]};
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -22,7 +22,11 @@ export default function App() {
           component={MainScreen}
           options={{headerShown: false}}
         />
-        <Stack.Screen name="Discounts" component={DiscountsScreen} />
+        <Stack.Screen
+          name="Discounts"
+          component={DiscountsScreen}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

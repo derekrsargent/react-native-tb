@@ -39,10 +39,10 @@ describe('utility functions', () => {
   });
 
   test('total calculation with no discount', () => {
-    expect(calculateTotal({subtotal: 100, tax: 13, discount: 0})).toBe(113);
+    expect(calculateTotal({subtotal: 100, tax: 13, discounts: 0})).toBe(113);
   });
 
   test('total calculation with a discount', () => {
-    expect(calculateTotal({subtotal: 200, tax: 26, discount: 10})).toBe(216);
+    expect(calculateTotal({subtotal: 200, tax: 26, discounts: 10})).toBe(216);
   });
 });

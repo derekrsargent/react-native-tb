@@ -1,26 +1,26 @@
 import React, {useState} from 'react';
-import {FlatList, Pressable, Text, StyleSheet, View} from 'react-native';
+import {FlatList, TouchableOpacity, Text, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {data} from '../data/data';
 
 import type {RootStackParamList} from '../../App';
 import type {NavigationProp} from '@react-navigation/native';
-import type {Data} from '../data/data';
+import type {Item} from '../data/data';
 
 const RightActions = () => {
   return (
     <View style={styles.leftAction}>
-      <Text>Add</Text>
+      <Text>Delete</Text>
     </View>
   );
 };
 
 const SwipeableItem = ({
-  text,
+  item,
   onSwipeFromRight,
 }: {
-  text: string;
+  item: Item;
   onSwipeFromRight: () => void;
 }) => {
   return (
@@ -29,46 +29,58 @@ const SwipeableItem = ({
       rightThreshold={0.1}
       onSwipeableOpen={onSwipeFromRight}>
       <View style={styles.listItem}>
-        <Text>{text}</Text>
+        <Text>{item.name}</Text>
       </View>
     </Swipeable>
   );
 };
 
-const SelectableItem = ({text}: {text: string}) => {
+const SelectableItem = ({item, onPress}: {item: Item; onPress: () => void}) => {
   return (
-    <View>
-      <Pressable onPress={() => console.warn('pressed')}>
-        <Text style={styles.text}>{text}</Text>
-      </Pressable>
+    <View style={styles.container}>
+      <TouchableOpacity onPress={onPress}>
+        <Text style={styles.text}>{item.name}</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const MainScreen = () => {
   const navigation: NavigationProp<RootStackParamList> = useNavigation();
-  const [ordered] = useState<Data[]>(data);
+  const [ordered, setOrdered] = useState<Item[]>();
+
+  const handleOnPress = (item: Item) => {
+    ordered
+      ? setOrdered([...ordered, {...item, id: Date.now()}])
+      : setOrdered([{...item, id: Date.now()}]);
+  };
+
+  const handleOnSwipeFromRight = (item: Item) => {
+    setOrdered(ordered?.filter(el => el.id !== item.id));
+  };
 
   return (
     <View style={styles.container}>
-      <Pressable
+      <TouchableOpacity
         onPress={() => navigation.navigate('Discounts')}
         style={styles.button}>
         <Text style={styles.buttonText}>Select Discount</Text>
-      </Pressable>
+      </TouchableOpacity>
       <View style={styles.columns}>
         <FlatList
           data={data}
           keyExtractor={item => item.id.toString()}
-          renderItem={({item}) => <SelectableItem text={item.name} />}
+          renderItem={({item}) => (
+            <SelectableItem item={item} onPress={() => handleOnPress(item)} />
+          )}
         />
         <FlatList
           data={ordered}
           keyExtractor={item => item.id.toString()}
           renderItem={({item}) => (
             <SwipeableItem
-              text={item.name}
-              onSwipeFromRight={() => console.warn('swiped right')}
+              item={item}
+              onSwipeFromRight={() => handleOnSwipeFromRight(item)}
             />
           )}
         />

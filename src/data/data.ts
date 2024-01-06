@@ -10,7 +10,7 @@ enum DiscountType {
   'Percentage',
 }
 
-export type Data = {
+export type Item = {
   id: number;
   name: string;
   category: Category;
@@ -24,7 +24,7 @@ export type Discount = {
   type: DiscountType;
 };
 
-export const data: Data[] = [
+export const data: Item[] = [
   {id: 0, name: 'Nachos', category: Category.Appetizers, price: 13.99},
   {id: 1, name: 'Calamari', category: Category.Appetizers, price: 11.99},
   {id: 2, name: 'Caesar Salad', category: Category.Appetizers, price: 10.99},

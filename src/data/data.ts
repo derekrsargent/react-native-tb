@@ -1,11 +1,11 @@
-enum Category {
+export enum Category {
   'Appetizers',
   'Mains',
   'Drinks',
   'Alcohol',
 }
 
-enum DiscountType {
+export enum DiscountType {
   'Dollars',
   'Percentage',
 }
@@ -31,12 +31,12 @@ export const data: Item[] = [
   {id: 3, name: 'Burger', category: Category.Mains, price: 9.99},
   {id: 4, name: 'Hotdog', category: Category.Mains, price: 3.99},
   {id: 5, name: 'Pizza', category: Category.Mains, price: 12.99},
-  {id: 6, name: 'Water', category: Category.Drinks, price: 0.0},
-  {id: 7, name: 'Pop', category: Category.Drinks, price: 2.0},
-  {id: 8, name: 'Orange Juice', category: Category.Drinks, price: 3.0},
-  {id: 9, name: 'Beer', category: Category.Alcohol, price: 5.0},
-  {id: 10, name: 'Cider', category: Category.Alcohol, price: 6.0},
-  {id: 11, name: 'Wine', category: Category.Alcohol, price: 7.0},
+  {id: 6, name: 'Water', category: Category.Drinks, price: 0},
+  {id: 7, name: 'Pop', category: Category.Drinks, price: 2},
+  {id: 8, name: 'Orange Juice', category: Category.Drinks, price: 3},
+  {id: 9, name: 'Beer', category: Category.Alcohol, price: 5},
+  {id: 10, name: 'Cider', category: Category.Alcohol, price: 6},
+  {id: 11, name: 'Wine', category: Category.Alcohol, price: 7},
 ];
 
 export const discounts: Discount[] = [

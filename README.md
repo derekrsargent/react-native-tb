@@ -4,7 +4,7 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 Authored by Derek Sargent.
 
-![](https://github.com/derekrsargent/react-native-tb/blob/main/src/assets/Screen%20Recording%202024-01-07%20at%205.59.33%20PM.mov)
+https://github.com/derekrsargent/react-native-tb/assets/5055243/4719878a-a2aa-48b5-b72a-c495c9c39a68
 
 # Getting Started
 

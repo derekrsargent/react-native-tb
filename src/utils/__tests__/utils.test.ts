@@ -5,6 +5,7 @@ import {
   calculateSubtotal,
   calculateTax,
   calculateTotal,
+  formatNumber,
 } from '../../utils/utils';
 
 //const empty = [];
@@ -15,25 +16,23 @@ describe('utility functions', () => {
   });
 
   test('discount calculation for $5.00', () => {
-    expect(calculateDiscounts({subtotal: 100, discountIds: [0]})).toBe(5);
+    expect(calculateDiscounts({total: 100, discountIds: [0]})).toBe(5);
   });
 
   test('discount calculation for 20%', () => {
-    expect(calculateDiscounts({subtotal: 100, discountIds: [1]})).toBe(20);
+    expect(calculateDiscounts({total: 100, discountIds: [1]})).toBe(20);
   });
 
   test('discount calculation for 10%', () => {
-    expect(calculateDiscounts({subtotal: 100, discountIds: [2]})).toBe(10);
+    expect(calculateDiscounts({total: 100, discountIds: [2]})).toBe(10);
   });
 
   test('discount calculation with combination of $5.00 and 20%', () => {
-    expect(calculateDiscounts({subtotal: 100, discountIds: [0, 1]})).toBe(24);
+    expect(calculateDiscounts({total: 100, discountIds: [0, 1]})).toBe(24);
   });
 
   test('discount calculation with combination of all three discounts', () => {
-    expect(calculateDiscounts({subtotal: 100, discountIds: [0, 1, 2]})).toBe(
-      31.6,
-    );
+    expect(calculateDiscounts({total: 100, discountIds: [0, 1, 2]})).toBe(31.6);
   });
 
   test('subtotal calculation', () => {
@@ -46,10 +45,22 @@ describe('utility functions', () => {
   });
 
   test('total calculation with no discount', () => {
-    expect(calculateTotal({subtotal: 100, discountIds: []})).toBe(113);
+    expect(calculateTotal({discountIds: [], ordered: data})).toBe(100.04);
   });
 
   test('total calculation with a discount', () => {
-    expect(calculateTotal({subtotal: 200, discountIds: [0]})).toBe(221);
+    expect(calculateTotal({discountIds: [0], ordered: data})).toBe(95.04);
+  });
+
+  test('total calculation with all discounts', () => {
+    expect(calculateTotal({discountIds: [0, 1, 2], ordered: data})).toBe(68.43);
+  });
+
+  test('formatting of number into string in dollar format', () => {
+    expect(formatNumber(12.345)).toBe('$12.35');
+  });
+
+  test('formatting of zero into string in dollar format', () => {
+    expect(formatNumber(0)).toBe('$0.00');
   });
 });

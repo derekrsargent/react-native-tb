@@ -14,13 +14,13 @@ export const calculateAlcoholTax = (ordered: Item[]) => {
 };
 
 export const calculateDiscounts = ({
-  subtotal,
   discountIds,
+  total,
 }: {
-  subtotal: number;
   discountIds: number[];
+  total: number;
 }) => {
-  let discountedSubtotal = subtotal;
+  let discountedTotal = total;
   let totalDiscount = 0;
 
   if (!discountIds) {
@@ -30,12 +30,10 @@ export const calculateDiscounts = ({
   discountIds.map(discountId => {
     if (discounts[discountId].type === DiscountType.Dollars) {
       totalDiscount += discounts[discountId].value;
-      discountedSubtotal -= discounts[discountId].value;
-      console.log(discountedSubtotal);
+      discountedTotal -= discounts[discountId].value;
     } else {
-      totalDiscount += discountedSubtotal * discounts[discountId].value;
-      discountedSubtotal -= discountedSubtotal * discounts[discountId].value;
-      console.log(discountedSubtotal);
+      totalDiscount += discountedTotal * discounts[discountId].value;
+      discountedTotal -= discountedTotal * discounts[discountId].value;
     }
   });
   return Math.round(totalDiscount * 100) / 100;
@@ -47,20 +45,24 @@ export const calculateSubtotal = (ordered: Item[]) => {
   return subtotal;
 };
 
-export const calculateTax = (subtotal: number) => {
-  return Math.round(subtotal * 0.13 * 100) / 100;
+export const calculateTax = (total: number) => {
+  return Math.round(total * 0.13 * 100) / 100;
 };
 
 export const calculateTotal = ({
   discountIds,
-  subtotal,
+  ordered,
 }: {
   discountIds: number[];
-  subtotal: number;
+  ordered: Item[];
 }) => {
+  const subtotal = calculateSubtotal(ordered);
+  const total =
+    subtotal + calculateTax(subtotal) + calculateAlcoholTax(ordered);
   return (
-    subtotal +
-    calculateTax(subtotal) -
-    calculateDiscounts({subtotal, discountIds})
+    Math.round((total - calculateDiscounts({total, discountIds})) * 100) / 100
   );
 };
+
+export const formatNumber = (number: number) =>
+  `$${(Math.round(number * 100) / 100).toFixed(2)}`;

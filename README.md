@@ -4,6 +4,8 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 Authored by Derek Sargent.
 
+![](https://github.com/derekrsargent/react-native-tb/blob/main/src/assets/Screen%20Recording%202024-01-07%20at%205.59.33%20PM.mov)
+
 # Getting Started
 
 > **Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.

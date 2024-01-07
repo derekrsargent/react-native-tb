@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff5252',
     justifyContent: 'center',
     alignItems: 'flex-end',
+    marginVertical: 3,
     paddingRight: 10,
   },
   listItem: {

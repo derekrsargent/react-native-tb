@@ -1,6 +1,7 @@
-import {Category} from '../data/data';
+import {Category, DiscountType} from '../types/types';
+import {discounts} from '../data/data';
 
-import type {Item} from '../data/data';
+import type {Item} from '../types/types';
 
 export const calculateAlcoholTax = (ordered: Item[]) => {
   let alcoholPrice = 0;
@@ -12,8 +13,32 @@ export const calculateAlcoholTax = (ordered: Item[]) => {
   return alcoholPrice * 0.1;
 };
 
-export const calculateDiscounts = (subtotal: number) => {
-  return subtotal * 0.2;
+export const calculateDiscounts = ({
+  subtotal,
+  discountIds,
+}: {
+  subtotal: number;
+  discountIds: number[];
+}) => {
+  let discountedSubtotal = subtotal;
+  let totalDiscount = 0;
+
+  if (!discountIds) {
+    return 0;
+  }
+
+  discountIds.map(discountId => {
+    if (discounts[discountId].type === DiscountType.Dollars) {
+      totalDiscount += discounts[discountId].value;
+      discountedSubtotal -= discounts[discountId].value;
+      console.log(discountedSubtotal);
+    } else {
+      totalDiscount += discountedSubtotal * discounts[discountId].value;
+      discountedSubtotal -= discountedSubtotal * discounts[discountId].value;
+      console.log(discountedSubtotal);
+    }
+  });
+  return Math.round(totalDiscount * 100) / 100;
 };
 
 export const calculateSubtotal = (ordered: Item[]) => {
@@ -27,13 +52,15 @@ export const calculateTax = (subtotal: number) => {
 };
 
 export const calculateTotal = ({
-  discounts,
+  discountIds,
   subtotal,
-  tax,
 }: {
-  discounts: number;
+  discountIds: number[];
   subtotal: number;
-  tax: number;
 }) => {
-  return subtotal + tax - discounts;
+  return (
+    subtotal +
+    calculateTax(subtotal) -
+    calculateDiscounts({subtotal, discountIds})
+  );
 };

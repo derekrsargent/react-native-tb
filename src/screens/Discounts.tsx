@@ -32,20 +32,24 @@ const DiscountsScreen = ({route}: {route: any}) => {
       <TouchableOpacity
         onPress={() =>
           navigation.navigate('Main', {discountIds: selectedDiscounts})
-        }>
-        <Text>Click me</Text>
+        }
+        style={styles.header}>
+        <Icon name="arrow-back" size={30} color="#404040" />
+        <Text style={styles.headerText}>Back to Order</Text>
       </TouchableOpacity>
-      {discounts.map(discount => (
-        <TouchableOpacity
-          key={discount.id}
-          onPress={() => handleOnPress(discount.id)}
-          style={styles.discount}>
-          <Text style={styles.text}>{discount.name}</Text>
-          {selectedDiscounts.includes(discount.id) && (
-            <Icon name="checkmark-circle" size={30} color="#26A65B" />
-          )}
-        </TouchableOpacity>
-      ))}
+      <View style={styles.discountSection}>
+        {discounts.map(discount => (
+          <TouchableOpacity
+            key={discount.id}
+            onPress={() => handleOnPress(discount.id)}
+            style={styles.discount}>
+            <Text style={styles.text}>{discount.name}</Text>
+            {selectedDiscounts.includes(discount.id) && (
+              <Icon name="checkmark-circle" size={30} color="#26A65B" />
+            )}
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 };
@@ -59,10 +63,27 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     margin: 10,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+    marginLeft: 15,
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: '700',
+    margin: 10,
+    color: '#404040',
+  },
   discount: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     margin: 10,
+    marginRight: 15,
+  },
+  discountSection: {
+    marginTop: 30,
   },
 });
 

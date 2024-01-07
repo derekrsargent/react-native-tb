@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {FlatList, TouchableOpacity, Text, StyleSheet, View} from 'react-native';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {data} from '../data/data';
 import {
   calculateAlcoholTax,
@@ -13,12 +14,12 @@ import {
 
 import type {RootStackParamList} from '../../App';
 import type {NavigationProp} from '@react-navigation/native';
-import type {Item} from '../data/data';
+import {Category, Item} from '../types/types';
 
 const RightActions = () => {
   return (
     <View style={styles.leftAction}>
-      <Text>Delete</Text>
+      <Icon name="trash-outline" size={20} color="white" />
     </View>
   );
 };
@@ -33,10 +34,10 @@ const SwipeableItem = ({
   return (
     <Swipeable
       renderRightActions={RightActions}
-      rightThreshold={0.1}
+      rightThreshold={0.2}
       onSwipeableOpen={onSwipeFromRight}>
       <View style={styles.listItem}>
-        <Text>{item.name}</Text>
+        <Text style={styles.ordered}>{item.name}</Text>
       </View>
     </Swipeable>
   );
@@ -52,6 +53,23 @@ const SelectableItem = ({item, onPress}: {item: Item; onPress: () => void}) => {
   );
 };
 
+let prevCategory = Category.Alcohol;
+
+const RenderSelectableItem = (item: Item, onPress: (item: Item) => void) => {
+  if (item.category !== prevCategory) {
+    prevCategory = item.category;
+    return (
+      <View style={{marginTop: prevCategory !== Category.Appetizers ? 20 : 0}}>
+        <Text style={styles.categoryHeading}>{Category[prevCategory]}</Text>
+        <SelectableItem item={item} onPress={() => onPress(item)} />
+      </View>
+    );
+  } else {
+    return <SelectableItem item={item} onPress={() => onPress(item)} />;
+  }
+};
+
+// TODO: route type
 const MainScreen = ({route}: {route: any}) => {
   const navigation: NavigationProp<RootStackParamList> = useNavigation();
   const [ordered, setOrdered] = useState<Item[]>();
@@ -59,19 +77,13 @@ const MainScreen = ({route}: {route: any}) => {
   const [discounts, setDiscounts] = useState(0);
   const [tax, setTax] = useState(0);
   const [total, setTotal] = useState(0);
-  const [selectedDiscounts, setSelectedDiscounts] = useState<number[]>([69]);
+  const [selectedDiscounts, setSelectedDiscounts] = useState<number[]>([]);
 
   useFocusEffect(
     useCallback(() => {
       setSelectedDiscounts(route?.params?.discountIds);
     }, [route?.params?.discountIds]),
   );
-
-  // TODO: remove
-  useEffect(() => {
-    console.log('In Main');
-    console.log(selectedDiscounts);
-  }, [selectedDiscounts]);
 
   const handleOnPress = (item: Item) => {
     ordered
@@ -89,17 +101,19 @@ const MainScreen = ({route}: {route: any}) => {
   useEffect(() => {
     if (ordered) {
       const _subtotal = calculateSubtotal(ordered);
-      const _discounts = 0;
-      const _tax = 0;
-
       setSubtotal(_subtotal);
-      setDiscounts(calculateDiscounts(_subtotal));
+      setDiscounts(
+        calculateDiscounts({
+          subtotal: _subtotal,
+          discountIds: selectedDiscounts,
+        }),
+      );
       setTax(calculateTax(_subtotal) + calculateAlcoholTax(ordered));
       setTotal(
-        calculateTotal({subtotal: _subtotal, tax: _tax, discounts: _discounts}),
+        calculateTotal({subtotal: _subtotal, discountIds: selectedDiscounts}),
       );
     }
-  }, [ordered]);
+  }, [ordered, selectedDiscounts]);
 
   return (
     <View style={styles.container}>
@@ -109,40 +123,43 @@ const MainScreen = ({route}: {route: any}) => {
             navigation.navigate('Discounts', {discountIds: selectedDiscounts})
           }
           style={styles.button}>
-          <Text style={styles.buttonText}>Select Discount</Text>
+          <Text style={styles.buttonText}>SELECT DISCOUNTS</Text>
         </TouchableOpacity>
         <View style={styles.columns}>
-          <FlatList
-            data={data}
-            keyExtractor={item => item.id.toString()}
-            renderItem={({item}) => (
-              <SelectableItem item={item} onPress={() => handleOnPress(item)} />
-            )}
-          />
-          <FlatList
-            data={ordered}
-            keyExtractor={item => item.id.toString()}
-            renderItem={({item}) => (
-              <SwipeableItem
-                item={item}
-                onSwipeFromRight={() => handleOnSwipeFromRight(item)}
-              />
-            )}
-          />
+          <View style={styles.container}>
+            <FlatList
+              data={data}
+              keyExtractor={item => item.id.toString()}
+              renderItem={({item}) => RenderSelectableItem(item, handleOnPress)}
+            />
+          </View>
+          <View style={styles.orderContainer}>
+            <Text style={styles.orderHeading}>Ordered</Text>
+            <FlatList
+              data={ordered}
+              keyExtractor={item => item.id.toString()}
+              renderItem={({item}) => (
+                <SwipeableItem
+                  item={item}
+                  onSwipeFromRight={() => handleOnSwipeFromRight(item)}
+                />
+              )}
+            />
+          </View>
         </View>
       </View>
-      <View style={styles.columns}>
-        <View>
-          <Text>Subtotal </Text>
-          <Text>Discounts</Text>
-          <Text>Tax</Text>
-          <Text>Total</Text>
+      <View style={styles.bill}>
+        <View style={styles.primaryTextContainer}>
+          <Text style={styles.primaryText}>Subtotal </Text>
+          <Text style={styles.primaryText}>Discounts</Text>
+          <Text style={styles.primaryText}>Tax</Text>
+          <Text style={styles.primaryText}>Total</Text>
         </View>
-        <View>
-          <Text>{formatNumber(subtotal)}</Text>
-          <Text>{formatNumber(discounts)}</Text>
-          <Text>{formatNumber(tax)}</Text>
-          <Text>{formatNumber(total)}</Text>
+        <View style={styles.secondaryTextContainer}>
+          <Text style={styles.secondaryText}>{formatNumber(subtotal)}</Text>
+          <Text style={styles.secondaryText}>{formatNumber(discounts)}</Text>
+          <Text style={styles.secondaryText}>{formatNumber(tax)}</Text>
+          <Text style={styles.secondaryText}>{formatNumber(total)}</Text>
         </View>
       </View>
     </View>
@@ -164,25 +181,76 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  orderContainer: {
+    flex: 1,
+    paddingLeft: 80,
+  },
   columns: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
   },
+  bill: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#218c74',
+  },
   leftAction: {
     flex: 1,
-    backgroundColor: 'red',
+    borderRadius: 5,
+    backgroundColor: '#ff5252',
     justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingRight: 10,
   },
   listItem: {
     flex: 1,
-    height: 40,
+    height: 32,
+    justifyContent: 'center',
+    marginBottom: 10,
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '500',
-    margin: 10,
+    margin: 5,
     marginLeft: 0,
+  },
+  primaryText: {
+    fontWeight: '700',
+    fontSize: 16,
+    color: 'white',
+  },
+  primaryTextContainer: {
+    alignItems: 'flex-end',
+  },
+  secondaryText: {
+    fontWeight: '500',
+    fontSize: 16,
+    color: 'white',
+  },
+  secondaryTextContainer: {
+    marginLeft: 80,
+  },
+  ordered: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#2c2c54',
+  },
+  categoryHeading: {
+    backgroundColor: '#474787',
+    fontSize: 16,
+    fontWeight: '800',
+    color: 'white',
+    padding: 4,
+  },
+  orderHeading: {
+    backgroundColor: '#218c74',
+    fontSize: 16,
+    fontWeight: '800',
+    color: 'white',
+    padding: 4,
   },
 });
 

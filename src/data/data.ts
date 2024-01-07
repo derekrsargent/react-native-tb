@@ -1,28 +1,6 @@
-export enum Category {
-  'Appetizers',
-  'Mains',
-  'Drinks',
-  'Alcohol',
-}
+import {Category, DiscountType} from '../types/types';
 
-export enum DiscountType {
-  'Dollars',
-  'Percentage',
-}
-
-export type Item = {
-  id: number;
-  name: string;
-  category: Category;
-  price: number;
-};
-
-export type Discount = {
-  id: number;
-  name: string;
-  value: number;
-  type: DiscountType;
-};
+import type {Discount, Item} from '../types/types';
 
 export const data: Item[] = [
   {id: 0, name: 'Nachos', category: Category.Appetizers, price: 13.99},
@@ -40,7 +18,7 @@ export const data: Item[] = [
 ];
 
 export const discounts: Discount[] = [
-  {id: 0, name: '10%', value: 0.1, type: DiscountType.Percentage},
-  {id: 1, name: '20%', value: 0.2, type: DiscountType.Percentage},
-  {id: 2, name: '$5.00', value: 5, type: DiscountType.Dollars},
+  {id: 0, name: '$5.00 off', value: 5, type: DiscountType.Dollars},
+  {id: 1, name: '20% off', value: 0.2, type: DiscountType.Percentage},
+  {id: 2, name: '10% off', value: 0.1, type: DiscountType.Percentage},
 ];

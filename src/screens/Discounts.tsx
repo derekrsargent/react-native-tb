@@ -4,10 +4,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {discounts} from '../data';
 
-import type {RootStackParamList} from '../../App';
 import type {NavigationProp} from '@react-navigation/native';
+import type {DiscountsScreenProps, RootStackParamList} from '../types';
 
-const DiscountsScreen = ({route}: {route: any}) => {
+const DiscountsScreen = ({route}: DiscountsScreenProps) => {
   const navigation: NavigationProp<RootStackParamList> = useNavigation();
   const [selectedDiscounts, setSelectedDiscounts] = useState<number[]>(
     route?.params?.discountIds || [],

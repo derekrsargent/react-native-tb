@@ -1,3 +1,5 @@
+import {RouteProp} from '@react-navigation/native';
+
 export enum Category {
   'Appetizers',
   'Mains',
@@ -22,4 +24,17 @@ export type Discount = {
   name: string;
   value: number;
   type: DiscountType;
+};
+
+export type RootStackParamList = {
+  Discounts: {discountIds: number[]};
+  Main: {discountIds: number[]};
+};
+
+export type MainScreenProps = {
+  route: RouteProp<RootStackParamList, 'Main'>;
+};
+
+export type DiscountsScreenProps = {
+  route: RouteProp<RootStackParamList, 'Discounts'>;
 };

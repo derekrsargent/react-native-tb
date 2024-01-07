@@ -12,11 +12,11 @@ import {
 } from '../utils';
 import {RenderSelectableItem, SwipeableItem} from '../components';
 
-import type {RootStackParamList} from '../../App';
 import type {NavigationProp} from '@react-navigation/native';
-import {Item} from '../types';
+import type {RootStackParamList} from '../types';
+import type {Item, MainScreenProps} from '../types';
 
-const MainScreen = ({route}: {route: any}) => {
+const MainScreen = ({route}: MainScreenProps) => {
   const navigation: NavigationProp<RootStackParamList> = useNavigation();
   const [ordered, setOrdered] = useState<Item[]>();
   const [subtotal, setSubtotal] = useState(0);

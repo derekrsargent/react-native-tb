@@ -1,7 +1,7 @@
-import {Category, DiscountType} from '../types/types';
-import {discounts} from '../data/data';
+import {Category, DiscountType} from '../types';
+import {discounts} from '../data';
 
-import type {Item} from '../types/types';
+import type {Item} from '../types';
 
 export const calculateAlcoholTax = (ordered: Item[]) => {
   let alcoholPrice = 0;

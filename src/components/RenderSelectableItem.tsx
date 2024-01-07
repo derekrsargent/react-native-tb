@@ -1,9 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {Category} from '../types/types';
+import {Category} from '../types';
 import {SelectableItem} from '../components';
 
-import type {Item} from '../types/types';
+import type {Item} from '../types';
 
 let prevCategory = Category.Alcohol;
 

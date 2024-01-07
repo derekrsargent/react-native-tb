@@ -3,7 +3,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import type {Item} from '../types/types';
+import type {Item} from '../types';
 
 const RightActions = () => {
   return (

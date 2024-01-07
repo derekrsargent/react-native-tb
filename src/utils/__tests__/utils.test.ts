@@ -1,4 +1,4 @@
-import {data} from '../../data/data';
+import {data} from '../../data';
 import {
   calculateAlcoholTax,
   calculateDiscounts,
@@ -6,7 +6,7 @@ import {
   calculateTax,
   calculateTotal,
   formatNumber,
-} from '../../utils/utils';
+} from '../../utils';
 
 //const empty = [];
 

@@ -1,6 +1,6 @@
-import {Category, DiscountType} from '../types/types';
+import {Category, DiscountType} from '../types';
 
-import type {Discount, Item} from '../types/types';
+import type {Discount, Item} from '../types';
 
 export const data: Item[] = [
   {id: 0, name: 'Nachos', category: Category.Appetizers, price: 13.99},

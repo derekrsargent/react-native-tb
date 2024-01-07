@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {FlatList, TouchableOpacity, Text, StyleSheet, View} from 'react-native';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {data} from '../data/data';
+import {data} from '../data';
 import {
   calculateAlcoholTax,
   calculateDiscounts,
@@ -9,12 +9,12 @@ import {
   calculateTax,
   calculateTotal,
   formatNumber,
-} from '../utils/utils';
+} from '../utils';
 import {RenderSelectableItem, SwipeableItem} from '../components';
 
 import type {RootStackParamList} from '../../App';
 import type {NavigationProp} from '@react-navigation/native';
-import {Item} from '../types/types';
+import {Item} from '../types';
 
 const MainScreen = ({route}: {route: any}) => {
   const navigation: NavigationProp<RootStackParamList> = useNavigation();

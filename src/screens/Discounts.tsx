@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
-import {discounts} from '../data/data';
+import {discounts} from '../data';
 
 import type {RootStackParamList} from '../../App';
 import type {NavigationProp} from '@react-navigation/native';

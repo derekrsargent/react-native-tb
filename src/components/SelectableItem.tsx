@@ -1,8 +1,8 @@
 import React from 'react';
 import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
-import {formatNumber} from '../utils/utils';
+import {formatNumber} from '../utils';
 
-import type {Item} from '../types/types';
+import type {Item} from '../types';
 
 const SelectableItem = ({item, onPress}: {item: Item; onPress: () => void}) => {
   return (

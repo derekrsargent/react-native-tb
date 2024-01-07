@@ -8,8 +8,6 @@ import {
   formatNumber,
 } from '../../utils';
 
-//const empty = [];
-
 describe('utility functions', () => {
   test('alcohol tax calculation', () => {
     expect(calculateAlcoholTax(data)).toBe(1.8);
@@ -54,6 +52,10 @@ describe('utility functions', () => {
 
   test('total calculation with all discounts', () => {
     expect(calculateTotal({discountIds: [0, 1, 2], ordered: data})).toBe(68.43);
+  });
+
+  test('total calculation when total is $0 with a $5 discount', () => {
+    expect(calculateTotal({discountIds: [0], ordered: []})).toBe(0);
   });
 
   test('formatting of number into string in dollar format', () => {

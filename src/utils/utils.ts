@@ -59,8 +59,9 @@ export const calculateTotal = ({
   const subtotal = calculateSubtotal(ordered);
   const total =
     subtotal + calculateTax(subtotal) + calculateAlcoholTax(ordered);
-  return (
-    Math.round((total - calculateDiscounts({total, discountIds})) * 100) / 100
+  return Math.max(
+    Math.round((total - calculateDiscounts({total, discountIds})) * 100) / 100,
+    0,
   );
 };
 

@@ -15,12 +15,12 @@ export const calculateAlcoholTax = (ordered: Item[]) => {
 
 export const calculateDiscounts = ({
   discountIds,
-  total,
+  maximumDiscount,
 }: {
   discountIds: number[];
-  total: number;
+  maximumDiscount: number;
 }) => {
-  let discountedTotal = total;
+  let discountedTotal = maximumDiscount;
   let totalDiscount = 0;
 
   if (!discountIds) {
@@ -36,7 +36,7 @@ export const calculateDiscounts = ({
       discountedTotal -= discountedTotal * discounts[discountId].value;
     }
   });
-  return Math.round(totalDiscount * 100) / 100;
+  return Math.min(Math.round(totalDiscount * 100) / 100, maximumDiscount);
 };
 
 export const calculateSubtotal = (ordered: Item[]) => {
@@ -60,7 +60,9 @@ export const calculateTotal = ({
   const total =
     subtotal + calculateTax(subtotal) + calculateAlcoholTax(ordered);
   return Math.max(
-    Math.round((total - calculateDiscounts({total, discountIds})) * 100) / 100,
+    Math.round(
+      (total - calculateDiscounts({maximumDiscount: total, discountIds})) * 100,
+    ) / 100,
     0,
   );
 };

@@ -14,23 +14,45 @@ describe('utility functions', () => {
   });
 
   test('discount calculation for $5.00', () => {
-    expect(calculateDiscounts({total: 100, discountIds: [0]})).toBe(5);
+    expect(calculateDiscounts({maximumDiscount: 100, discountIds: [0]})).toBe(
+      5,
+    );
   });
 
   test('discount calculation for 20%', () => {
-    expect(calculateDiscounts({total: 100, discountIds: [1]})).toBe(20);
+    expect(calculateDiscounts({maximumDiscount: 100, discountIds: [1]})).toBe(
+      20,
+    );
   });
 
   test('discount calculation for 10%', () => {
-    expect(calculateDiscounts({total: 100, discountIds: [2]})).toBe(10);
+    expect(calculateDiscounts({maximumDiscount: 100, discountIds: [2]})).toBe(
+      10,
+    );
   });
 
   test('discount calculation with combination of $5.00 and 20%', () => {
-    expect(calculateDiscounts({total: 100, discountIds: [0, 1]})).toBe(24);
+    expect(
+      calculateDiscounts({maximumDiscount: 100, discountIds: [0, 1]}),
+    ).toBe(24);
   });
 
   test('discount calculation with combination of all three discounts', () => {
-    expect(calculateDiscounts({total: 100, discountIds: [0, 1, 2]})).toBe(31.6);
+    expect(
+      calculateDiscounts({maximumDiscount: 100, discountIds: [0, 1, 2]}),
+    ).toBe(31.6);
+  });
+
+  test('discount calculation where the total is $0.00', () => {
+    expect(calculateDiscounts({maximumDiscount: 0, discountIds: [0, 1]})).toBe(
+      0,
+    );
+  });
+
+  test('discount calculation where the total is less than the $5.00 discount', () => {
+    expect(calculateDiscounts({maximumDiscount: 2.26, discountIds: [0]})).toBe(
+      2.26,
+    );
   });
 
   test('subtotal calculation', () => {

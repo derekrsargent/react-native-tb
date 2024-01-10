@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, TouchableOpacity, Text, StyleSheet, View} from 'react-native';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {data} from '../data';
@@ -24,12 +24,17 @@ const MainScreen = ({route}: MainScreenProps) => {
   const [tax, setTax] = useState(0);
   const [total, setTotal] = useState(0);
   const [selectedDiscounts, setSelectedDiscounts] = useState<number[]>([]);
+  const flatlistRef = useRef<FlatList>(null);
 
   useFocusEffect(
     useCallback(() => {
       setSelectedDiscounts(route?.params?.discountIds);
     }, [route?.params?.discountIds]),
   );
+
+  useEffect(() => {
+    flatlistRef.current?.scrollToEnd();
+  }, [ordered]);
 
   const handleOnPress = (item: Item) => {
     ordered
@@ -44,6 +49,8 @@ const MainScreen = ({route}: MainScreenProps) => {
   useEffect(() => {
     if (ordered) {
       const _subtotal = calculateSubtotal(ordered);
+      const _maximumDiscount =
+        _subtotal + calculateTax(_subtotal) + calculateAlcoholTax(ordered);
       const _total = calculateTotal({
         discountIds: selectedDiscounts,
         ordered,
@@ -51,7 +58,7 @@ const MainScreen = ({route}: MainScreenProps) => {
       setSubtotal(_subtotal);
       setDiscounts(
         calculateDiscounts({
-          total: _total,
+          maximumDiscount: _maximumDiscount,
           discountIds: selectedDiscounts,
         }),
       );
@@ -71,17 +78,18 @@ const MainScreen = ({route}: MainScreenProps) => {
           <Text style={styles.buttonText}>SELECT DISCOUNTS</Text>
         </TouchableOpacity>
         <View style={styles.columns}>
-          <View>
+          <View style={styles.orderContainer}>
             <FlatList
               data={data}
               keyExtractor={item => item.id.toString()}
               renderItem={({item}) => RenderSelectableItem(item, handleOnPress)}
             />
           </View>
-          <View style={styles.orderContainer}>
+          <View style={styles.container}>
             <Text style={styles.orderHeading}>Ordered</Text>
             <FlatList
               data={ordered}
+              ref={flatlistRef}
               keyExtractor={item => item.id.toString()}
               renderItem={({item}) => (
                 <SwipeableItem
@@ -128,14 +136,16 @@ const styles = StyleSheet.create({
   },
   orderContainer: {
     flex: 1,
-    paddingLeft: 40,
+    paddingRight: 20,
   },
   columns: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: 12,
   },
   bill: {
+    flex: 0,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     paddingHorizontal: 20,

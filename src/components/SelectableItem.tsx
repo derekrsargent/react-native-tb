@@ -6,11 +6,10 @@ import type {Item} from '../types';
 
 const SelectableItem = ({item, onPress}: {item: Item; onPress: () => void}) => {
   return (
-    <View style={styles.menuContainer}>
-      <TouchableOpacity onPress={onPress}>
-        <Text style={styles.text}>{`${item.name} (${formatNumber(
-          item.price,
-        )})`}</Text>
+    <View>
+      <TouchableOpacity onPress={onPress} style={styles.menuContainer}>
+        <Text style={styles.text}>{item.name}</Text>
+        <Text style={styles.priceText}>{formatNumber(item.price)}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -19,13 +18,20 @@ const SelectableItem = ({item, onPress}: {item: Item; onPress: () => void}) => {
 const styles = StyleSheet.create({
   menuContainer: {
     flex: 1,
-    width: 170,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   text: {
     fontSize: 16,
+    fontWeight: '700',
+    margin: 5,
+    marginLeft: 5,
+  },
+  priceText: {
+    fontSize: 16,
     fontWeight: '500',
     margin: 5,
-    marginLeft: 0,
   },
 });
 

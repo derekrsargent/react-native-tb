@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {formatNumber} from '../utils';
 
 import type {Item} from '../types';
 
@@ -27,6 +28,7 @@ export const SwipeableItem = ({
       onSwipeableOpen={onSwipeFromRight}>
       <View style={styles.listItem}>
         <Text style={styles.ordered}>{item.name}</Text>
+        <Text style={styles.priceText}>{formatNumber(item.price)}</Text>
       </View>
     </Swipeable>
   );
@@ -44,14 +46,22 @@ const styles = StyleSheet.create({
   },
   listItem: {
     flex: 1,
+    flexDirection: 'row',
     height: 32,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 10,
   },
   ordered: {
     fontSize: 16,
     fontWeight: '500',
     color: '#2c2c54',
+    marginLeft: 5,
+  },
+  priceText: {
+    fontSize: 16,
+    fontWeight: '500',
+    margin: 5,
   },
 });
 

@@ -4,7 +4,7 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 Authored by Derek Sargent.
 
-https://github.com/derekrsargent/react-native-tb/assets/5055243/4719878a-a2aa-48b5-b72a-c495c9c39a68
+https://github.com/derekrsargent/react-native-tb/assets/5055243/c1ba57b3-ed59-468b-884c-0ed0a4457967
 
 # Getting Started
 
